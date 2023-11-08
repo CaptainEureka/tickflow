@@ -15,6 +15,7 @@
 
   pre-commit.hooks = {
     alejandra.enable = true;
+    pyright.enable = true;
     ruff.enable = true;
     statix.enable = true;
     shellcheck.enable = true;
