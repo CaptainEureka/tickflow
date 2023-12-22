@@ -4,12 +4,19 @@ from abc import ABC, abstractmethod
 from enum import StrEnum
 from typing import Annotated, List, NewType, Optional, Self, Type, TypeVar
 
-from pydantic import BaseModel, Field, ValidationError, computed_field
+from pydantic import (
+    UUID4,
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    computed_field,
+)
 
 T = TypeVar("T", bound=BaseModel)
 
 UserId = NewType("UserId", int)
-TaskId = NewType("TaskId", uuid.UUID)
+TaskId = NewType("TaskId", UUID4)
 
 AnnotatedTaskId = Annotated[
     TaskId,
@@ -19,6 +26,8 @@ AnnotatedUserId = Annotated[UserId, Field(..., alias="userId")]
 
 
 class ConvertibleModel(BaseModel, ABC):
+    model_config = ConfigDict(populate_by_name=True, use_enum_values=True)
+
     @abstractmethod
     def into(self: Self, target_model_type: Type[T]) -> T:
         ...
